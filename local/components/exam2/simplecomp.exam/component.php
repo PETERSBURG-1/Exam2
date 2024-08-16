@@ -88,6 +88,7 @@ if ($this->startResultCache()) {
         ),
     );
 
+
     $arResult['PRODUCT_CNT'] = 0;
     while($arProducts = $obProducts->Fetch())
     {
