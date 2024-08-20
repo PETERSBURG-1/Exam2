@@ -15,6 +15,20 @@ $arParams['PROPERTY_IBLOCK'] = trim($arParams['PROPERTY_IBLOCK']);
 $arParams['PROPERTY_UF'] = trim($arParams['PROPERTY_UF']);
 
 global $USER;
+if($USER->isAuthorized()) {
+    $arButtons = CIBlock::GetPanelButtons($arParams['NEWS_IBLOCK_ID']);
+    $this->AddIncludeAreaIcons(
+      array(
+          array(
+            'ID' => 'linklb',
+            'TITLE' => GetMessage('IBLOCK_IN_ADMIN'),
+            'URL' => $arButtons['submenu']['element_list']['ACTION_URL'],
+            'IN_PARAMS_MENU' => true,
+        )
+      )
+    );
+}
+
 if($USER->IsAuthorized()) {
     $arResult['COUNT'] = 0;
     $currentUserId = $USER->GetID();
@@ -24,7 +38,6 @@ if($USER->IsAuthorized()) {
         array('ID' => $currentUserId),
         array('SELECT' => array($arParams['PROPERTY_UF']))
     )->Fetch()[$arParams['PROPERTY_UF']];
-
 
 if ($this->startResultCache(false, array($currentUserType, $currentUserId))) {
     $rsUsers = CUser::GetList(
