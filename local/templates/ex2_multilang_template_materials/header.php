@@ -9,7 +9,7 @@ IncludeTemplateLangFile(__FILE__);
 <?$APPLICATION->SetAdditionalCSS(SITE_TEMPLATE_PATH."/common.css")?>
 <?$APPLICATION->SetAdditionalCSS(SITE_TEMPLATE_PATH."/colors.css")?>
 <?$APPLICATION->ShowHead();?>
-<meta property= "specialcount" content="<?$APPLICATION->ShowProperty("specialcount")?>">, 
+<meta property= "specialcount" content="<?$APPLICATION->ShowProperty("specialcount")?>">
 	<title><?$APPLICATION->ShowTitle()?></title>
 </head>
 <body>

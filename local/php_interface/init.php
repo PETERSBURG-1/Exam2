@@ -1,9 +1,14 @@
 <?php
+IncludeModuleLangFile(__FILE__);
 AddEventHandler("main", "OnBeforeEventAdd", array("Exam2", "Ex2_51"));
 AddEventHandler("main", "OnBuildGlobalMenu", array("Exam2", "Ex2_95"));
+AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", Array("Exam2", "Ex2_50"));
 
+const IBLOCK_CATALOG = 12;
+const MAX_COUNT = 2;
 class Exam2
 {
+
     static function Ex2_51(&$event, &$lid, &$arFields)
     {
         if ($event == 'FEEDBACK_FORM') {
@@ -77,4 +82,35 @@ class Exam2
             $aGlobalMenu = ['global_menu_content' => $aGlobalMenu['global_menu_content']];
         }
     }
+
+    static function Ex2_50(&$arFields)
+    {
+            if ($arFields['IBLOCK_ID'] == IBLOCK_CATALOG) {
+                if ($arFields['ACTIVE'] == 'N') {
+                    $res = CIBlockElement::GetList(
+                      array(),
+                      array(
+                        'IBLOCK_ID' => IBLOCK_CATALOG,
+                        'ID' => $arFields['ID'],
+                      ),
+                        false,
+                        false,
+                        array(
+                            'ID',
+                            'IBLOCK_ID',
+                            'NAME',
+                            'SHOW_COUNTER'
+                        ),
+                    );
+                    $arItems = $res->Fetch();
+                    if ($arItems['SHOW_COUNTER'] > MAX_COUNT) {
+                        global $APPLICATION;
+                        $sText = GetMessage('NOT_DEACTIVE', array('#COUNT#' => $arItems['SHOW_COUNTER']));
+                        $APPLICATION->throwException($sText);
+                        return false;
+                    }
+                }
+            }
+    }
+
 }
