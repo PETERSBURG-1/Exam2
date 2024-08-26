@@ -4,10 +4,12 @@ AddEventHandler("main", "OnBeforeEventAdd", array("Exam2", "Ex2_51"));
 AddEventHandler("main", "OnBuildGlobalMenu", array("Exam2", "Ex2_95"));
 AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", Array("Exam2", "Ex2_50"));
 AddEventHandler("main", "OnEpilog", array('Exam2', 'Ex2_93'));
+AddEventHandler("main", "OnBeforeProlog", array('Exam2', 'Ex2_94'));
 
 
 const IBLOCK_CATALOG = 12;
 const MAX_COUNT = 2;
+const IBLOCK_META = 15;
 class Exam2
 {
 
@@ -132,6 +134,37 @@ class Exam2
                     'DESCRIPTION' => $APPLICATION->GetCurPage(),
                 )
             );
+        }
+    }
+
+    static function Ex2_94()
+    {
+        global $APPLICATION;
+        $curPage = $APPLICATION->GetCurDir();
+
+        if (\Bitrix\Main\Loader::includeModule('iblock')) {
+            $arFilter = array(
+                'IBLOCK_ID' => IBLOCK_META,
+                'NAME' => $curPage,
+            );
+            $arSelect = array(
+              'IBLOCK_ID',
+              'ID',
+              'PROPERTY_TITLE',
+              'PROPERTY_DESCRIPTION',
+            );
+
+            $ob = CIBlockElement::GetList(
+              array(),
+                $arFilter,
+                false,
+                false,
+                $arSelect,
+            );
+            if ($arRes = $ob -> Fetch()) {
+                $APPLICATION->SetPageProperty('title', $arRes['PROPERTY_TITLE_VALUE']);
+                $APPLICATION->SetPageProperty('description', $arRes['PROPERTY_DESCRIPTION_VALUE']);
+            }
         }
     }
 
