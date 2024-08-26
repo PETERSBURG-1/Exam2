@@ -3,6 +3,8 @@ IncludeModuleLangFile(__FILE__);
 AddEventHandler("main", "OnBeforeEventAdd", array("Exam2", "Ex2_51"));
 AddEventHandler("main", "OnBuildGlobalMenu", array("Exam2", "Ex2_95"));
 AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", Array("Exam2", "Ex2_50"));
+AddEventHandler("main", "OnEpilog", array('Exam2', 'Ex2_93'));
+
 
 const IBLOCK_CATALOG = 12;
 const MAX_COUNT = 2;
@@ -111,6 +113,26 @@ class Exam2
                     }
                 }
             }
+    }
+
+    static function Ex2_93()
+    {
+        if (defined('ERROR_404') && ERROR_404 == 'Y') {
+            global $APPLICATION;
+            $APPLICATION->RestartBuffer();
+            include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH .'/header.php';
+            include $_SERVER['DOCUMENT_ROOT'] . '/404.php';
+            include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/footer.php';
+
+            CEventLog::Add(
+                array(
+                    'SEVERITY' => 'INFO',
+                    'AUDIT_TYPE_ID' => 'ERROR_404',
+                    'MODULE_ID' => 'main',
+                    'DESCRIPTION' => $APPLICATION->GetCurPage(),
+                )
+            );
+        }
     }
 
 }
