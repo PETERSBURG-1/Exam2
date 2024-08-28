@@ -55,7 +55,8 @@ if ($this->startResultCache(false, array($USER->GetGroups()))) {
         "ID",
         "IBLOCK_ID",
         'IBLOCK_SECTION_ID',
-        "NAME"
+        "NAME",
+        'DETAIL_PAGE_URL'
     );
     $arFilterElemsProd = array (
         "IBLOCK_ID" => $arParams["PRODUCTS_IBLOCK_ID"],
@@ -65,7 +66,10 @@ if ($this->startResultCache(false, array($USER->GetGroups()))) {
     );
 
     $rsElementsProd = CIBlockElement::GetList(
-        array(),
+        array(
+            'NAME' => 'ASC',
+            'SORT' => 'ASC'
+        ),
         $arFilterElemsProd,
         false,
         false,
@@ -73,7 +77,7 @@ if ($this->startResultCache(false, array($USER->GetGroups()))) {
     );
 
     if ($arParams["TEMPLATE_DETAIL_LINK"]) {
-        $rsElementsProd->SetUrlTemplates($arParams['TEMPLATE_DETAIL_LINK']);
+        $rsElementsProd->SetUrlTemplates($arParams['TEMPLATE_DETAIL_LINK'] . '.php');
     }
 
     while($arElementProd = $rsElementsProd->GetNextElement())

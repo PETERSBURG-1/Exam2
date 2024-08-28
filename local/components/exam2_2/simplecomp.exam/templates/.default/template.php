@@ -12,7 +12,7 @@
                         <?= $arItems['NAME'] ?> -
                         <?= $arItems['PROPERTY']['PRICE']['VALUE']?> -
                         <?= $arItems['PROPERTY']['MATERIAL']['VALUE']?> -
-                        <a href="<?= $arItems['DETAIL_PAGE_URL']?>"><?= $arItems['DETAIL_PAGE_URL']?></a>
+                        (<a href="<?= $arItems['DETAIL_PAGE_URL']?>"><?= $arItems['DETAIL_PAGE_URL']?></a>)
                     </li>
                 <? endforeach; ?>
             </ul>
