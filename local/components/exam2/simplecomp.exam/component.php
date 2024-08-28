@@ -14,8 +14,14 @@ if (!isset($arParams['CACHE_TIME'])) {
     $arParams['CACHE_TIME'] = 36000000;
 }
 
+$cFilter = false;
+
+if (isset($_REQUEST['F']))
+    $cFilter = true;
+
 // Кэширование
-if ($this->startResultCache()) {
+if ($this->startResultCache(false, array($cFilter))) {
+
     $arNews = [];
     $arNewsID = [];
     // Массив новостей
@@ -66,14 +72,25 @@ if ($this->startResultCache()) {
         $arSections[$arSectionCatalog['ID']] = $arSectionCatalog;
     }
 
+    $arFilterElements = array(
+        'IBLOCK_ID' => $arParams['PRODUCTS_IBLOCK_ID'],
+        'ACTIVE' => 'Y',
+        'SECTION_ID' => $arSectionsID
+    );
+
+    if ($cFilter) {
+        $arFilterElements[] = array(
+            array('<=PROPERTY_PRICE' => 1700, 'PROPERTY_MATERIAL' => 'Дерево, ткань'),
+            array('<PROPERTY_PRICE' => 1500, 'PROPERTY_MATERIAL' => 'Металл, пластик'),
+            'LOGIC' => 'OR'
+        );
+        $this->abortResultCache();
+    }
+
     // Получаем список активных товаро из разделов
     $obProducts = CIBlockElement::GetList(
         array(),
-        array(
-            'IBLOCK_ID' => $arParams['PRODUCTS_IBLOCK_ID'],
-            'ACTIVE' => 'Y',
-            'SECTION_ID' => $arSectionsID,
-        ),
+        $arFilterElements,
         false,
         false,
         array(
@@ -114,5 +131,6 @@ if ($this->startResultCache()) {
 } else {
     $this->abortResultCache();
 }
+
 $APPLICATION->SetTitle(GetMessage('TITLE_COUNT') . $arResult['PRODUCT_CNT']);
 ?>
