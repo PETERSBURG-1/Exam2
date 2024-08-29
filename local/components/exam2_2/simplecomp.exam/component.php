@@ -21,8 +21,12 @@ if (empty($arParams['CLASSIF_IBLOCK_ID']))
 
 $arParams['PROPERTY_CODE'] = trim($arParams['PROPERTY_CODE']);
 $arNavigation = CDBResult::GetNavParams($arNavParams);
+
+global $CACHE_MANAGER;
 global $USER;
-if ($this->startResultCache(false, array($USER->GetGroups(), $arNavigation))) {
+if ($this->startResultCache(false, array($USER->GetGroups(), $arNavigation), '/servicesIblock')) {
+
+    $CACHE_MANAGER->RegisterTag('iblock_id_13');
 
     $arClassif = [];
     $arClassifID = [];
