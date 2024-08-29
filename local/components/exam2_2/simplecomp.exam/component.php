@@ -20,8 +20,9 @@ if (empty($arParams['CLASSIF_IBLOCK_ID']))
     $arParams['CLASSIF_IBLOCK_ID'] = 0;
 
 $arParams['PROPERTY_CODE'] = trim($arParams['PROPERTY_CODE']);
+$arNavigation = CDBResult::GetNavParams($arNavParams);
 global $USER;
-if ($this->startResultCache(false, array($USER->GetGroups()))) {
+if ($this->startResultCache(false, array($USER->GetGroups(), $arNavigation))) {
 
     $arClassif = [];
     $arClassifID = [];
@@ -42,8 +43,13 @@ if ($this->startResultCache(false, array($USER->GetGroups()))) {
         array(),
         $arFilterElems,
         false,
-        false,
+        array(
+            'nPageSize' => $arParams['ELEMENT_PER_PAGE'],
+            'bShowAll' => true
+        ),
         $arSelectElems);
+
+    $arResult['NAV_STRING'] = $rsElements->GetPageNavString(GetMessage('PAGE_TITLE'));
 
     while($arElement = $rsElements->GetNext())
     {
@@ -88,7 +94,7 @@ if ($this->startResultCache(false, array($USER->GetGroups()))) {
         $arField['PROPERTY'] = $arElementProd->GetProperties();
 
         foreach ($arField['PROPERTY']['FIRMA']['VALUE'] as $value) {
-            $arClassif[$value]['ELEMENTS'][$arField['ID']] = $arField;
+                $arClassif[$value]['ELEMENTS'][$arField['ID']] = $arField;
         }
     }
 

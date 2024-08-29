@@ -5,6 +5,7 @@
 <? if ($arResult['CLASSIF']): ?>
     <ul>
         <? foreach ($arResult['CLASSIF'] as $arClassif): ?>
+            <? if (!empty($arClassif['NAME'])): ?>
             <li><b><?= $arClassif['NAME'] ?></b></li>
             <ul>
                 <? foreach ($arClassif['ELEMENTS'] as $arItems): ?>
@@ -16,6 +17,10 @@
                     </li>
                 <? endforeach; ?>
             </ul>
+            <? endif; ?>
         <? endforeach; ?>
     </ul>
+<br>
+    <p><b><?= GetMessage('NAVIGATION'); ?></b></p>
+    <?= $arResult['NAV_STRING']?>
 <? endif; ?>
