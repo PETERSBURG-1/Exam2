@@ -44,6 +44,7 @@ if ($this->startResultCache(false, array($USER->GetGroups()))) {
         false,
         false,
         $arSelectElems);
+
     while($arElement = $rsElements->GetNext())
     {
         $arClassif[$arElement['ID']] = $arElement;
@@ -76,6 +77,7 @@ if ($this->startResultCache(false, array($USER->GetGroups()))) {
         $arSelectElemsProd
     );
 
+    // Формирование ссылки из шаблона
     if ($arParams["TEMPLATE_DETAIL_LINK"]) {
         $rsElementsProd->SetUrlTemplates($arParams['TEMPLATE_DETAIL_LINK'] . '.php');
     }
@@ -89,6 +91,7 @@ if ($this->startResultCache(false, array($USER->GetGroups()))) {
             $arClassif[$value]['ELEMENTS'][$arField['ID']] = $arField;
         }
     }
+
     $arResult['CLASSIF'] = $arClassif;
     $this->SetResultCacheKeys(array('COUNT'));
     $this->includeComponentTemplate();

@@ -109,6 +109,20 @@ if ($this->startResultCache(false, array($cFilter))) {
     $arResult['PRODUCT_CNT'] = 0;
     while($arProducts = $obProducts->Fetch())
     {
+        // Добавляем эрмитаж
+        $arButtons = CIBlock::GetPanelButtons(
+            $arParams['PRODUCTS_IBLOCK_ID'],
+            $arProducts['ID'],
+            0,
+            array('SECTION_BUTTONS' => false, 'SESSID' => false)
+        );
+
+        $arProducts['EDIT_LINK'] = $arButtons['edit']['edit_element']['ACTION_URL'];
+        $arProducts['DELETE_LINK'] = $arButtons['edit']['delete_element']['ACTION_URL'];
+
+        $arResult['ADD_LINK'] = $arButtons['edit']['add_element']['ACTION_URL'];
+        $arResult['IBLOCK_ID'] = $arParams['PRODUCTS_IBLOCK_ID'];
+
         $arResult['PRODUCT_CNT'] ++;
        foreach ($arSections[$arProducts['IBLOCK_SECTION_ID']][$arParams['PROPERTY_UF']] as $newsID) {
             $arNews[$newsID]['PRODUCTS'][] = $arProducts;
@@ -125,7 +139,6 @@ if ($this->startResultCache(false, array($cFilter))) {
     }
 
     $arResult['NEWS'] = $arNews;
-
     $this->SetResultCacheKeys(array('PRODUCT_CNT'));
     $this->includeComponentTemplate();
 } else {
